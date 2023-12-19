@@ -3,13 +3,13 @@
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const Gap default_gap        = {.isgap = 1, .realgap = 5, .gappx = 5};
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int snap      = 5;        /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;        /* 0 means no systray */
-static const int showbar            = 1;        /* 0 means no bar */
+static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
@@ -41,6 +41,7 @@ static const char *const autostart[] = {
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 #include "shiftview.c"
+#include <X11/XF86keysym.h>
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -48,8 +49,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "mpv",      NULL,       NULL,       2,            0,           -1 },
 };
 
 /* layout(s) */
@@ -83,35 +83,46 @@ static const char *termcmd[]  = { "alacritty", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
-	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_b,      spawn,          SHCMD("addbm") },
+	{ MODKEY|ShiftMask,             XK_b,      spawn,          SHCMD("showbm") },
+	{ MODKEY,                       XK_c,      spawn,          SHCMD("toggle_touchpad") },
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.01} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.01} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.01} },
+	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_k,      spawn,          SHCMD("keepassxc") },
+	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.01} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_n,      shiftview,      {.i = +1} },
 	{ MODKEY,                       XK_p,      shiftview,      {.i = -1} },
+	{ MODKEY,                       XK_q,      killclient,     {0} },
+	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY,                       XK_s,      spawn,          SHCMD("d-screenshot") },
+	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_w,      spawn,          SHCMD("librewolf -P default") },
+	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("librewolf --private-window") },
+	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("librewolf -P") },
+	{ MODKEY,                       XK_Escape, spawn,          SHCMD("slock") },
+	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
+	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
+	{ MODKEY,                       XK_minus,  setgaps,        {.i = -5 } },
+	{ MODKEY|ShiftMask,             XK_minus,  setgaps,        {.i = GAP_RESET } },
+	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
+	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_minus,  setgaps,        {.i = -5 } },
-	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
-	{ MODKEY|ShiftMask,             XK_minus,  setgaps,        {.i = GAP_RESET } },
-	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -121,8 +132,11 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ 0, XF86XK_AudioLowerVolume,              spawn,          SHCMD("amixer set Master 1%-")},
+	{ 0, XF86XK_AudioMute,                     spawn,          SHCMD("amixer set Master toggle")},
+	{ 0, XF86XK_AudioRaiseVolume,              spawn,          SHCMD("amixer set Master 1%+")},
+	{ 0, XF86XK_MonBrightnessDown,             spawn,          SHCMD("brightnessctl set 1%-")},
+	{ 0, XF86XK_MonBrightnessUp,               spawn,          SHCMD("brightnessctl set 1%+")},
 };
 
 /* button definitions */
