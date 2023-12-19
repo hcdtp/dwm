@@ -24,6 +24,15 @@ static const char *colors[][3]      = {
 };
 
 static const char *const autostart[] = {
+	"dunst", NULL,
+	"nm-applet", NULL,
+	"gammastep", NULL,
+	"picom", "--transparent-clipping", "--unredir-if-possible", NULL,
+	"simple-polkit-authentication-agent", NULL, /* polkit_gnome_wrapped */
+	"sh", "-c", "~/.fehbg", NULL,
+
+	"setxkbmap", "-option", "caps:swapescape,altwin:swap_alt_win", NULL,
+	"xset", "r", "rate", "300", "70", NULL,
 	NULL /* terminate */
 };
 
