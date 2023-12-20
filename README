@@ -11,8 +11,11 @@ systray
 actualfullscreen
 cool autostart
 fullgaps
+moveresize
 
-Read manpage,config.def.h for more informatioin.
+Checkout more patches at https://dwm.suckless.org/patches.
+
+Read manual, config.def.h for more informatioin.
 
 
 Requirements

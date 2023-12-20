@@ -88,14 +88,22 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_c,      spawn,          SHCMD("toggle_touchpad") },
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_e,      spawn,          SHCMD("keepassxc") },
 	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.01} },
+	{ MODKEY|ControlMask,           XK_h,      moveresize,     {.v = "0x 0y -25w 0h"}},  // resize left
+	{ MODKEY|ShiftMask,             XK_h,      moveresize,     {.v = "-25x 0y 0w 0h"}},  // move left
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_j,      moveresize,     {.v = "0x 0y 0w 25h"}},   // resize down
+	{ MODKEY|ShiftMask,             XK_j,      moveresize,     {.v = "0x 25y 0w 0h"}},   // move down
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_k,      spawn,          SHCMD("keepassxc") },
+	{ MODKEY|ControlMask,           XK_k,      moveresize,     {.v = "0x 0y 0w -25h"}},  // resize up
+	{ MODKEY|ShiftMask,             XK_k,      moveresize,     {.v = "0x -25y 0w 0h"}},  // move up
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.01} },
+	{ MODKEY|ControlMask,           XK_l,      moveresize,     {.v = "0x 0y 25w 0h"}},   // resize right
+	{ MODKEY|ShiftMask,             XK_l,      moveresize,     {.v = "25x 0y 0w 0h"}},   // move right
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_n,      shiftview,      {.i = +1} },
 	{ MODKEY,                       XK_p,      shiftview,      {.i = -1} },
