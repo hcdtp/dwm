@@ -30,6 +30,7 @@ static const char *const autostart[] = {
 	"picom", "--transparent-clipping", "--unredir-if-possible", NULL,
 	"simple-polkit-authentication-agent", NULL, /* polkit_gnome_wrapped */
 	"sh", "-c", "~/.fehbg", NULL,
+	"dwmbar", NULL,
 
 	"setxkbmap", "-option", "caps:swapescape,altwin:swap_alt_win", NULL,
 	"xset", "r", "rate", "300", "70", NULL,
@@ -114,7 +115,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_w,      spawn,          SHCMD("librewolf -P default") },
 	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("librewolf --private-window") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("librewolf -P") },
-	{ MODKEY,                       XK_Escape, spawn,          SHCMD("slock") },
+	{ MODKEY,                       XK_Escape, spawn,          SHCMD("i3lock") },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
