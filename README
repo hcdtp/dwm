@@ -12,6 +12,7 @@ actualfullscreen
 cool autostart
 fullgaps
 moveresize
+togglefloatingcenter
 
 Checkout more patches at https://dwm.suckless.org/patches.
 
