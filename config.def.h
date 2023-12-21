@@ -11,7 +11,7 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
+static const char *fonts[]          = { "monospace:size=10", "NotoColorEmoji:pixelsize=10:antialias=true:autohint=true" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char nbg[]             = "#020202";
 static const char nfg[]             = "#bbbbbb";
@@ -23,14 +23,17 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { sfg,       sbg,       "#aa0000" },
 };
 
+/* TODO remove user scripts dependency */
+
 static const char *const autostart[] = {
 	"dunst", NULL,
 	"nm-applet", NULL,
-	"gammastep", NULL,
 	"picom", "--transparent-clipping", "--unredir-if-possible", NULL,
 	"simple-polkit-authentication-agent", NULL, /* polkit_gnome_wrapped */
+	"dwmblocks", NULL,
+
+	"amixer", "set", "Capture", "0", "nocap", NULL, /* FIXME pipewire keeps toggling mic to 100% unmute*/
 	"sh", "-c", "~/.fehbg", NULL,
-	"dwmbar", NULL,
 
 	"setxkbmap", "-option", "caps:swapescape,altwin:swap_alt_win", NULL,
 	"xset", "r", "rate", "300", "70", NULL,
@@ -47,9 +50,12 @@ static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
+	 *	type following command, and click the window [https://dwm.suckless.org/customisation/rules/]
+	 *	xprop | awk '/^WM_CLASS/{sub(/.* =/, "instance:"); sub(/,/, "\nclass:"); print}/^WM_NAME/{sub(/.* =/, "title:"); print}'
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "mpv",      NULL,       NULL,       2,            0,           -1 },
+	{ "Virt-manager",NULL,    NULL,       1 << 7,       0,           -1 },
 };
 
 /* layout(s) */
@@ -61,8 +67,8 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ "><>",      NULL },    /* no layout function means floating behavior */
 };
 
 /* key definitions */
@@ -91,7 +97,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_e,      spawn,          SHCMD("keepassxc") },
 	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
-	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.01} },
 	{ MODKEY|ControlMask,           XK_h,      moveresize,     {.v = "0x 0y -25w 0h"}},  // resize left
 	{ MODKEY|ShiftMask,             XK_h,      moveresize,     {.v = "-25x 0y 0w 0h"}},  // move left
@@ -105,19 +111,23 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.01} },
 	{ MODKEY|ControlMask,           XK_l,      moveresize,     {.v = "0x 0y 25w 0h"}},   // resize right
 	{ MODKEY|ShiftMask,             XK_l,      moveresize,     {.v = "25x 0y 0w 0h"}},   // move right
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_n,      shiftview,      {.i = +1} },
 	{ MODKEY,                       XK_p,      shiftview,      {.i = -1} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_r,      spawn,          SHCMD("pkill -x picom || picom --transparent-clipping --unredir-if-possible") },
 	{ MODKEY,                       XK_s,      spawn,          SHCMD("d-screenshot") },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_w,      spawn,          SHCMD("librewolf -P default") },
 	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("librewolf --private-window") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("librewolf -P") },
-	{ MODKEY,                       XK_Escape, spawn,          SHCMD("i3lock") },
+	{ MODKEY,                       XK_z,      spawn,          SHCMD("kill $(pidof gammastep) || gammastep") },
+	{ MODKEY,                       XK_Escape, spawn,          SHCMD("dunstctl set-paused true;i3lock -e -n -u -c 223333;dunstctl set-paused false") },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
+	{ 0,                            XK_Print,  spawn,        SHCMD("mkdir -p ~/Pictures/flameshot && flameshot full -p ~/Pictures/flameshot/$(date +%Y%m%d-%H%M%S)")},
+	{ 0|ShiftMask,                  XK_Print,  spawn,        SHCMD("mkdir -p ~/Pictures/flameshot && flameshot gui -p ~/Pictures/flameshot/$(date +%Y%m%d-%H%M%S)")},
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
@@ -140,11 +150,11 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ 0, XF86XK_AudioLowerVolume,              spawn,          SHCMD("amixer set Master 1%-")},
-	{ 0, XF86XK_AudioMute,                     spawn,          SHCMD("amixer set Master toggle")},
-	{ 0, XF86XK_AudioRaiseVolume,              spawn,          SHCMD("amixer set Master 1%+")},
-	{ 0, XF86XK_MonBrightnessDown,             spawn,          SHCMD("brightnessctl set 1%-")},
-	{ 0, XF86XK_MonBrightnessUp,               spawn,          SHCMD("brightnessctl set 1%+")},
+	{ 0, XF86XK_AudioLowerVolume,              spawn,          SHCMD("amixer -q set Master 1%- && kill -57 $(pidof dwmblocks)")},
+	{ 0, XF86XK_AudioMute,                     spawn,          SHCMD("amixer -q set Master toggle && kill -57 $(pidof dwmblocks)")},
+	{ 0, XF86XK_AudioRaiseVolume,              spawn,          SHCMD("amixer -q set Master 1%+ && kill -57 $(pidof dwmblocks)")},
+	{ 0, XF86XK_MonBrightnessDown,             spawn,          SHCMD("brightnessctl -q set 1%- && kill -56 $(pidof dwmblocks)")},
+	{ 0, XF86XK_MonBrightnessUp,               spawn,          SHCMD("brightnessctl -q set 1%+ && kill -56 $(pidof dwmblocks)")},
 };
 
 /* button definitions */
