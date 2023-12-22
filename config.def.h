@@ -92,7 +92,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY|ControlMask,           XK_b,      spawn,          SHCMD("addbm") },
 	{ MODKEY|ShiftMask,             XK_b,      spawn,          SHCMD("showbm") },
-	{ MODKEY,                       XK_c,      spawn,          SHCMD("toggle_touchpad") },
+	{ MODKEY,                       XK_c,      spawn,          SHCMD("\
+            id=$(xinput | grep -i touchpad | sed 's|^.*id=||' | awk '{print $1}');\
+            en=$(xinput list-props $id | sed -n '2p' | awk '{print $NF}');\
+            [ $en -eq 1 ] && xinput disable $id || xinput enable $id") },
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_e,      spawn,          SHCMD("keepassxc") },
