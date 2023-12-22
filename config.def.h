@@ -23,8 +23,6 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { sfg,       sbg,       "#aa0000" },
 };
 
-/* TODO remove user scripts dependency */
-
 static const char *const autostart[] = {
 	"dunst", NULL,
 	"nm-applet", NULL,
@@ -33,7 +31,7 @@ static const char *const autostart[] = {
 	"dwmblocks", NULL,
 
 	"amixer", "set", "Capture", "0", "nocap", NULL, /* FIXME pipewire keeps toggling mic to 100% unmute*/
-	"sh", "-c", "~/.fehbg", NULL,
+	"sh", "-c", "sh ~/.fehbg", NULL,
 
 	"setxkbmap", "-option", "caps:swapescape,altwin:swap_alt_win", NULL,
 	"xset", "r", "rate", "300", "70", NULL,
@@ -90,8 +88,8 @@ static const char *termcmd[]  = { "alacritty", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY|ControlMask,           XK_b,      spawn,          SHCMD("addbm") },
-	{ MODKEY|ShiftMask,             XK_b,      spawn,          SHCMD("showbm") },
+	{ MODKEY|ControlMask,           XK_b,      spawn,          SHCMD("add-bookmark ~/.m/files/bookmarks.txt") },
+	{ MODKEY|ShiftMask,             XK_b,      spawn,          SHCMD("show-bookmark ~/.m/files/bookmarks.txt") },
 	{ MODKEY,                       XK_c,      spawn,          SHCMD("\
             id=$(xinput | grep -i touchpad | sed 's|^.*id=||' | awk '{print $1}');\
             en=$(xinput list-props $id | sed -n '2p' | awk '{print $NF}');\
@@ -120,7 +118,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_r,      spawn,          SHCMD("pkill -x picom || picom --transparent-clipping --unredir-if-possible") },
-	{ MODKEY,                       XK_s,      spawn,          SHCMD("d-screenshot") },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_w,      spawn,          SHCMD("librewolf -P default") },
 	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("librewolf --private-window") },
@@ -129,8 +126,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Escape, spawn,          SHCMD("dunstctl set-paused true;i3lock -e -n -u -c 223333;dunstctl set-paused false") },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
-	{ 0,                            XK_Print,  spawn,        SHCMD("mkdir -p ~/Pictures/flameshot && flameshot full -p ~/Pictures/flameshot/$(date +%Y%m%d-%H%M%S)")},
-	{ 0|ShiftMask,                  XK_Print,  spawn,        SHCMD("mkdir -p ~/Pictures/flameshot && flameshot gui -p ~/Pictures/flameshot/$(date +%Y%m%d-%H%M%S)")},
+	{ 0,                            XK_Print,  spawn,          SHCMD("mkdir -p ~/Pictures/flameshot && flameshot full -p ~/Pictures/flameshot/$(date +%Y%m%d-%H%M%S)")},
+	{ 0|ShiftMask,                  XK_Print,  spawn,          SHCMD("mkdir -p ~/Pictures/flameshot && flameshot gui -p ~/Pictures/flameshot/$(date +%Y%m%d-%H%M%S)")},
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
@@ -177,4 +174,3 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-
