@@ -30,7 +30,7 @@ static const char *const autostart[] = {
 	"simple-polkit-authentication-agent", NULL, /* polkit_gnome_wrapped */
 	"dwmblocks", NULL,
 
-	"amixer", "set", "Capture", "0", "nocap", NULL, /* FIXME pipewire keeps toggling mic to 100% unmute*/
+	"sh", "-c", "sleep 1 && amixer -q set Capture 0 nocap; kill -57 $(pidof dwmblocks)", NULL, /* FIXME pipewire keeps toggling mic to 100% unmute*/
 	"sh", "-c", "sh ~/.fehbg", NULL,
 
 	"setxkbmap", "-option", "caps:swapescape,altwin:swap_alt_win", NULL,
