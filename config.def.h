@@ -30,6 +30,7 @@ static const char *const autostart[] = {
 	"simple-polkit-authentication-agent", NULL, /* polkit_gnome_wrapped */
 	"dwmblocks", NULL,
 	"gammastep", "-P", "-r", NULL,
+	"sh", "-c", "xautolock -lockaftersleep -secure -time 2 -detectsleep -locker 'lock-xorg -u -e'", NULL,
 
 	"sh", "-c", "sleep 1 && amixer -q set Capture 0 nocap; kill -57 $(pidof dwmblocks)", NULL, /* FIXME pipewire keeps toggling mic to 100% unmute*/
 	"sh", "-c", "id=$(xinput | grep -i touchpad | sed 's|^.*id=||' | awk '{print $1}');\
@@ -126,7 +127,7 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("librewolf --private-window") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("librewolf -P") },
 	{ MODKEY,                       XK_z,      spawn,          SHCMD("kill $(pidof gammastep) || gammastep -P -r") },
-	{ MODKEY,                       XK_Escape, spawn,          SHCMD("dunstctl set-paused true;i3lock -e -n -u -c 223333;dunstctl set-paused false") },
+	{ MODKEY,                       XK_Escape, spawn,          SHCMD("lock-xorg -u -e") },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
 	{ 0,                            XK_Print,  spawn,          SHCMD("mkdir -p ~/Pictures/flameshot && flameshot full -p ~/Pictures/flameshot/$(date +%Y%m%d-%H%M%S)")},
