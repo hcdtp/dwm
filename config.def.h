@@ -35,7 +35,7 @@ static const char *const autostart[] = {
 	"sh", "-c", "sleep 1 && amixer -q set Capture 0 nocap; kill -57 $(pidof dwmblocks)", NULL, /* FIXME pipewire keeps toggling mic to 100% unmute*/
 	"sh", "-c", "id=$(xinput | grep -i touchpad | sed 's|^.*id=||' | awk '{print $1}');\
         en=$(xinput list-props $id | sed -n '2p' | awk '{print $NF}'); xinput disable $id", NULL,
-	"feh", "--no-fehbg", "--bg-fill", "~/.local/share/background", NULL,
+	"sh", "-c", "feh --no-fehbg --bg-fill ~/.local/share/background", NULL,
 
 	"setxkbmap", "-option", "caps:swapescape,altwin:swap_alt_win", NULL,
 	"xset", "r", "rate", "300", "70", NULL,
