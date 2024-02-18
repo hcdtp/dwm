@@ -126,7 +126,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_w,      spawn,          SHCMD("librewolf -P default") },
 	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("librewolf --private-window") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("librewolf -P") },
-	{ MODKEY,                       XK_x,      spawn,          SHCMD("kill $(pidof xautolock) || xautolock -lockaftersleep -secure -time 2 -detectsleep -locker 'lock-xorg -u -e'") },
+	{ MODKEY,                       XK_x,      spawn,          SHCMD("kill $(pidof xautolock) && notify-send 'Killed xautolock' || xautolock -lockaftersleep -secure -time 2 -detectsleep -locker 'lock-xorg -u -e'") },
 	{ MODKEY,                       XK_z,      spawn,          SHCMD("kill $(pidof gammastep) || gammastep -P -r") },
 	{ MODKEY,                       XK_Escape, spawn,          SHCMD("lock-xorg -u -e") },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
