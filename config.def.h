@@ -126,6 +126,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_w,      spawn,          SHCMD("librewolf -P default") },
 	{ MODKEY|ControlMask,           XK_w,      spawn,          SHCMD("librewolf --private-window") },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("librewolf -P") },
+	{ MODKEY,                       XK_x,      spawn,          SHCMD("kill $(pidof xautolock) || xautolock -lockaftersleep -secure -time 2 -detectsleep -locker 'lock-xorg -u -e'") },
 	{ MODKEY,                       XK_z,      spawn,          SHCMD("kill $(pidof gammastep) || gammastep -P -r") },
 	{ MODKEY,                       XK_Escape, spawn,          SHCMD("lock-xorg -u -e") },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
@@ -154,7 +155,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ 0,                            XK_F6,     spawn,          SHCMD("amixer -q set Capture nocap 0 && kill -57 $(pidof dwmblocks)")}, /* FIXME use action keys */
+	{ MODKEY,                       XK_F6,     spawn,          SHCMD("amixer -q set Capture nocap 0 && kill -57 $(pidof dwmblocks)")}, /* FIXME use action keys */
 	{ 0, XF86XK_AudioLowerVolume,              spawn,          SHCMD("amixer -q set Master 1%- && kill -57 $(pidof dwmblocks)")},
 	{ 0, XF86XK_AudioMute,                     spawn,          SHCMD("amixer -q set Master toggle && kill -57 $(pidof dwmblocks)")},
 	{ 0, XF86XK_AudioRaiseVolume,              spawn,          SHCMD("amixer -q set Master 1%+ && kill -57 $(pidof dwmblocks)")},
