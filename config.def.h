@@ -92,8 +92,8 @@ static const char *termcmd[]  = { "alacritty", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY|ControlMask,           XK_b,      spawn,          SHCMD("add-bookmark ~/.m/files/bookmarks.txt") },
-	{ MODKEY|ShiftMask,             XK_b,      spawn,          SHCMD("show-bookmark ~/.m/files/bookmarks.txt") },
+	{ MODKEY|ControlMask,           XK_b,      spawn,          SHCMD("add-bookmark") },
+	{ MODKEY|ShiftMask,             XK_b,      spawn,          SHCMD("show-bookmark") },
 	{ MODKEY,                       XK_c,      spawn,          SHCMD("\
             id=$(xinput | grep -i touchpad | sed 's|^.*id=||' | awk '{print $1}');\
             en=$(xinput list-props $id | sed -n '2p' | awk '{print $NF}');\
@@ -132,7 +132,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
 	{ 0,                            XK_Print,  spawn,          SHCMD("mkdir -p ~/Pictures/flameshot && flameshot full -p ~/Pictures/flameshot/$(date +%Y%m%d-%H%M%S)")},
-	{ 0|ShiftMask,                  XK_Print,  spawn,          SHCMD("mkdir -p ~/Pictures/flameshot && flameshot gui -p ~/Pictures/flameshot/$(date +%Y%m%d-%H%M%S)")},
+	{ 0|ShiftMask,                  XK_Print,  spawn,          SHCMD("flameshot gui")},
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
